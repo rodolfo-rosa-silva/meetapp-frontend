@@ -1,9 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Creators as SigninActions } from '../../store/ducks/signin';
 
 import logo from '../../assets/images/logo.svg';
 
@@ -12,23 +7,20 @@ import {
   Label, Input, Button, Link,
 } from '../../styles/forms';
 
-class Signin extends Component {
-  static propTypes = {
-    signinUserAction: PropTypes.func.isRequired,
-  };
-
+class Signup extends Component {
   state = {
+    username: '',
     email: '',
     password: '',
+    password_confirmation: '',
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
 
-    const { email, password } = this.state;
-    const { signinUserAction } = this.props;
-
-    signinUserAction({ email, password });
+    const {
+      username, email, password, password_confirmation,
+    } = this.state;
   };
 
   render() {
@@ -36,6 +28,13 @@ class Signin extends Component {
       <Container>
         <Form onSubmit={this.handleSubmit}>
           <Logo src={logo} alt="Logotipo" />
+          <Label>Nome</Label>
+          <Input
+            type="text"
+            name="username"
+            placeholder="Digite seu nome"
+            onChange={e => this.setState({ username: e.target.value })}
+          />
           <Label>Email</Label>
           <Input
             type="text"
@@ -50,19 +49,19 @@ class Signin extends Component {
             placeholder="Sua senha secreta"
             onChange={e => this.setState({ password: e.target.value })}
           />
+          <Label>Confirme sua senha</Label>
+          <Input
+            type="password"
+            name="password_confirmation"
+            placeholder="Confirme sua senha secreta"
+            onChange={e => this.setState({ password_confirmation: e.target.value })}
+          />
           <Button type="submit">Entrar</Button>
-          <Link to="/signup">Criar conta grátis</Link>
+          <Link to="/sigin">Já tenho conta</Link>
         </Form>
       </Container>
     );
   }
 }
 
-const mapStateToProps = state => ({});
-
-const mapDispatchToProps = dispatch => bindActionCreators(SigninActions, dispatch);
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Signin);
+export default Signup;
