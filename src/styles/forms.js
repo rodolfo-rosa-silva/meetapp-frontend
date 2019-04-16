@@ -40,3 +40,9 @@ export const Link = styled.a`
   color: #ffffff;
   cursor: pointer;
 `;
+
+export const Message = styled.div`
+  text-align: center;
+  margin: 10px 0 30px;
+  width: 100%;
+`;

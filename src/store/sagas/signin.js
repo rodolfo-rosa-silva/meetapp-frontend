@@ -3,14 +3,12 @@ import api from '../../services/api';
 
 import { Creators as SigninActions } from '../ducks/signin';
 
-export function* sendDataSignin(action) {
+export function* signin(action) {
   try {
-    console.tron.log(action.payload.data);
     const response = yield call(api.post, '/signin', action.payload.data);
-    console.tron.log(response);
 
-    yield put(SigninActions.signinUserAction(response));
+    yield put(SigninActions.signinSuccess(response));
   } catch (err) {
-    console.tron.log(err);
+    yield put(SigninActions.signinError(err.response.data[0].message));
   }
 }

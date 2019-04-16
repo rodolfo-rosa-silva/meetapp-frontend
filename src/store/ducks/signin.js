@@ -5,30 +5,44 @@ export const Types = {
 };
 
 const INITIAL_STATE = {
-  data: [],
+  message: '',
   loading: false,
 };
 
 export default function signin(state = INITIAL_STATE, action) {
   switch (action.type) {
     case Types.SIGNIN_REQUEST:
-      return { ...state, loading: true };
+      return { ...state, loading: true, message: 'Enviando...' };
     case Types.SIGNIN_SUCCESS:
-      return { ...state, loading: false, data: action.payload.data };
+      return {
+        ...state,
+        loading: false,
+        message: '',
+      };
     case Types.SIGNIN_ERROR:
-      return { ...state, loading: false, data: action.payload.data };
+      return {
+        ...state,
+        loading: false,
+        message: action.payload.message,
+      };
     default:
       return state;
   }
 }
 
 export const Creators = {
-  signinUserAction: data => ({
+  signinRequest: data => ({
     type: Types.SIGNIN_REQUEST,
     payload: { data },
   }),
-  signinUserSuccess: data => ({
+
+  signinSuccess: data => ({
     type: Types.SIGNIN_SUCCESS,
     payload: { data },
+  }),
+
+  signinError: message => ({
+    type: Types.SIGNIN_ERROR,
+    payload: { message },
   }),
 };

@@ -9,12 +9,14 @@ import logo from '../../assets/images/logo.svg';
 
 import { Container, Form, Logo } from './styles';
 import {
-  Label, Input, Button, Link,
+  Label, Input, Button, Link, Message,
 } from '../../styles/forms';
 
 class Signin extends Component {
   static propTypes = {
-    signinUserAction: PropTypes.func.isRequired,
+    message: PropTypes.string.isRequired,
+    loading: PropTypes.bool.isRequired,
+    signinRequest: PropTypes.func.isRequired,
   };
 
   state = {
@@ -25,13 +27,15 @@ class Signin extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
+    const { signinRequest, loading } = this.props;
     const { email, password } = this.state;
-    const { signinUserAction } = this.props;
 
-    signinUserAction({ email, password });
+    if (!loading) signinRequest({ email, password });
   };
 
   render() {
+    const { message } = this.props;
+
     return (
       <Container>
         <Form onSubmit={this.handleSubmit}>
@@ -50,6 +54,7 @@ class Signin extends Component {
             placeholder="Sua senha secreta"
             onChange={e => this.setState({ password: e.target.value })}
           />
+          {message.length > 0 ? <Message>{message}</Message> : ''}
           <Button type="submit">Entrar</Button>
           <Link to="/signup">Criar conta grátis</Link>
         </Form>
@@ -58,7 +63,11 @@ class Signin extends Component {
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  message: state.signin.message,
+  error: state.signin.loading,
+  loading: state.signin.loading,
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators(SigninActions, dispatch);
 

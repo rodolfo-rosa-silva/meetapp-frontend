@@ -1,10 +1,13 @@
 import React from 'react';
 
 import { Switch, Route } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
 
 import Signin from '../pages/signin';
 import Signup from '../pages/signup';
 import Dashboard from '../pages/dashboard';
+
+import history from './history';
 
 function isLoggedIn() {
   if (localStorage.getItem('token')) {
@@ -23,12 +26,14 @@ function requireAuth(nextState, replace) {
 }
 
 const Routes = () => (
-  <Switch>
-    <Route exact path="/" component={Signin} />
-    <Route path="/signin" component={Signin} />
-    <Route path="/signup" component={Signup} />
-    <Route path="/dashboard" component={Dashboard} onEnter={requireAuth} />
-  </Switch>
+  <ConnectedRouter history={history}>
+    <Switch>
+      <Route exact path="/" component={Signin} />
+      <Route path="/signin" component={Signin} />
+      <Route path="/signup" component={Signup} />
+      <Route path="/dashboard" component={Dashboard} onEnter={requireAuth} />
+    </Switch>
+  </ConnectedRouter>
 );
 
 export default Routes;
