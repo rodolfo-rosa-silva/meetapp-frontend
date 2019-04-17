@@ -9,21 +9,7 @@ import Dashboard from '../pages/dashboard';
 
 import history from './history';
 
-function isLoggedIn() {
-  if (localStorage.getItem('token')) {
-    return true;
-  }
-
-  return false;
-}
-
-function requireAuth(nextState, replace) {
-  if (!isLoggedIn()) {
-    replace({
-      pathname: '/signin',
-    });
-  }
-}
+import PrivateRoute from './privateRoute';
 
 const Routes = () => (
   <ConnectedRouter history={history}>
@@ -31,7 +17,7 @@ const Routes = () => (
       <Route exact path="/" component={Signin} />
       <Route path="/signin" component={Signin} />
       <Route path="/signup" component={Signup} />
-      <Route path="/dashboard" component={Dashboard} onEnter={requireAuth} />
+      <PrivateRoute path="/dashboard" component={Dashboard} />
     </Switch>
   </ConnectedRouter>
 );
