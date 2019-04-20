@@ -33,12 +33,16 @@ export const Button = styled.button`
   font-size: 16px;
 `;
 
-export const Link = styled.a`
-  margin-top: 20px;
-  opacity: 0.6;
-  font-size: 16px;
-  color: #ffffff;
-  cursor: pointer;
+export const ContainerLink = styled.div`
+  margin-top: 30px;
+
+  a {
+    opacity: 0.6;
+    font-size: 16px;
+    color: #ffffff;
+    cursor: pointer;
+    text-decoration: none;
+  }
 `;
 
 export const Message = styled.div`

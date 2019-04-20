@@ -1,29 +1,49 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Creators as SignupActions } from '../../store/ducks/signup';
 
 import logo from '../../assets/images/logo.svg';
 
 import { Container, Form, Logo } from './styles';
 import {
-  Label, Input, Button, Link,
+  Label, Input, Button, Message, ContainerLink,
 } from '../../styles/forms';
 
 class Signup extends Component {
+  static propTypes = {
+    message: PropTypes.string.isRequired,
+    loading: PropTypes.bool.isRequired,
+    signupRequest: PropTypes.func.isRequired,
+  };
+
   state = {
     username: '',
     email: '',
     password: '',
-    password_confirmation: '',
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
 
-    const {
-      username, email, password, password_confirmation,
-    } = this.state;
+    const { signupRequest, loading } = this.props;
+    const { username, email, password } = this.state;
+
+    if (!loading) {
+      signupRequest({
+        username,
+        email,
+        password,
+      });
+    }
   };
 
   render() {
+    const { message } = this.props;
+
     return (
       <Container>
         <Form onSubmit={this.handleSubmit}>
@@ -49,19 +69,25 @@ class Signup extends Component {
             placeholder="Sua senha secreta"
             onChange={e => this.setState({ password: e.target.value })}
           />
-          <Label>Confirme sua senha</Label>
-          <Input
-            type="password"
-            name="password_confirmation"
-            placeholder="Confirme sua senha secreta"
-            onChange={e => this.setState({ password_confirmation: e.target.value })}
-          />
-          <Button type="submit">Entrar</Button>
-          <Link to="/sigin">Já tenho conta</Link>
+          {message.length > 0 ? <Message>{message}</Message> : ''}
+          <Button type="submit">Criar conta</Button>
+          <ContainerLink>
+            <Link to="/signin">Já tenho conta</Link>
+          </ContainerLink>
         </Form>
       </Container>
     );
   }
 }
 
-export default Signup;
+const mapStateToProps = state => ({
+  message: state.signup.message,
+  loading: state.signup.loading,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators(SignupActions, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Signup);

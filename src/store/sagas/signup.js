@@ -2,29 +2,30 @@ import { call, put } from 'redux-saga/effects';
 import api from '../../services/api';
 import history from '../../routes/history';
 
-import { Creators as SigninActions } from '../ducks/signin';
+import { Creators as SignupActions } from '../ducks/signup';
 
-export function* signin(action) {
+export function* signup(action) {
   try {
-    const response = yield call(api.post, '/signin', action.payload.data);
+    const response = yield call(api.post, '/signup', action.payload.data);
+    const { data } = response;
 
-    yield put(SigninActions.signinSuccess(response));
+    yield put(SignupActions.signupSuccess(data.message));
 
-    localStorage.setItem('@meetapp:user_token', response.data.token);
+    localStorage.setItem('@meetapp:user_token', data.token);
     /**
      * salva o id do usuario para facilitar na busca dos dados no back
      * considero isso falha de seguranca, mas deixo como melhoria pois
      * pois estou atrasado com relacao ao prazo final
      */
-    localStorage.setItem('@meetapp:user_id', response.data.user_id);
-    localStorage.setItem('@meetapp:username', response.data.username);
+    localStorage.setItem('@meetapp:user_id', data.user.id);
+    localStorage.setItem('@meetapp:username', response.user.username);
 
-    history.push(response.data.redirectUrl);
+    history.push('/preferences');
   } catch (err) {
     // faz uma trativa para os erros que vem em formato de array do adonis
     const { data } = err.response;
     const message = Array.isArray(data) ? data[0].message : data.message;
 
-    yield put(SigninActions.signinError(message));
+    yield put(SignupActions.signupError(message));
   }
 }

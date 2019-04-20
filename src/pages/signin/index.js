@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -9,7 +10,7 @@ import logo from '../../assets/images/logo.svg';
 
 import { Container, Form, Logo } from './styles';
 import {
-  Label, Input, Button, Link, Message,
+  Label, Input, Button, Message, ContainerLink,
 } from '../../styles/forms';
 
 class Signin extends Component {
@@ -56,7 +57,9 @@ class Signin extends Component {
           />
           {message.length > 0 ? <Message>{message}</Message> : ''}
           <Button type="submit">Entrar</Button>
-          <Link to="/signup">Criar conta grátis</Link>
+          <ContainerLink>
+            <Link to="/signup">Criar conta grátis</Link>
+          </ContainerLink>
         </Form>
       </Container>
     );
@@ -65,7 +68,6 @@ class Signin extends Component {
 
 const mapStateToProps = state => ({
   message: state.signin.message,
-  error: state.signin.loading,
   loading: state.signin.loading,
 });
 
