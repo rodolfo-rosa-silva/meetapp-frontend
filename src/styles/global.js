@@ -6,6 +6,7 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     outline: 0;
+    text-decoration: none;
   }
   html, body, #root {
     height: 100%;

@@ -5,8 +5,9 @@ import { ConnectedRouter } from 'connected-react-router';
 
 import Signin from '../pages/signin';
 import Signup from '../pages/signup';
-import Dashboard from '../pages/dashboard';
 import Preferences from '../pages/preferences';
+import Dashboard from '../pages/dashboard';
+import MeetupDetail from '../pages/meetup/detail';
 
 import history from './history';
 
@@ -20,6 +21,7 @@ const Routes = () => (
       <Route path="/signup" component={Signup} />
       <PrivateRoute path="/preferences" component={Preferences} />
       <PrivateRoute path="/dashboard" component={Dashboard} />
+      <PrivateRoute path="/meetup/:id" component={MeetupDetail} />
     </Switch>
   </ConnectedRouter>
 );
