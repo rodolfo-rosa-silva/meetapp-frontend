@@ -89,13 +89,7 @@ export const Form = styled.form`
   flex-direction: column;
 `;
 
-export const ErrorSubscription = styled.p`
-  font-size: 12px;
-  color: #e5556e;
-  margin-bottom: 20px;
-`;
-
-export const AlreadySubscription = styled.p`
+export const SuccessConfirmation = styled.p`
   font-size: 18px;
   color: #2fde46;
   font-weight: 700;

@@ -9,27 +9,20 @@ export const Container = styled.div`
   flex-direction: column;
 `;
 
-export const Form = styled.form`
-  width: 315px;
+export const ContainerLoad = styled.div`
   display: flex;
   flex: 1;
   justify-content: center;
-  flex-direction: column;
   align-items: center;
 `;
 
-export const HelloUser = styled.h2`
-  font-size: 24px;
-  text-align: left;
-  width: 100%;
-`;
-
-export const IntroText = styled.p`
-  opacity: 0.8;
-  font-size: 16px;
-  line-height: 28px;
-  text-align: left;
-  margin-top: 20px;
+export const Form = styled.form`
+  width: 335px;
+  display: flex;
+  flex: 1;
+  padding-top: 60px;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export const TitlePreferences = styled.h3`
@@ -38,9 +31,4 @@ export const TitlePreferences = styled.h3`
   text-align: left;
   width: 100%;
   margin: 30px 0 20px;
-`;
-
-export const BoxLoading = styled.div`
-  width: 100%;
-  margin-bottom: 20px;
 `;

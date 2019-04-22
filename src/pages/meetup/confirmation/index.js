@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Creators as MeetupDetailActions } from '../../../store/ducks/meetupDetail';
-
-import { Button } from '../../../styles/forms';
+import { Creators as MeetupConfirmationActions } from '../../../store/ducks/meetupConfirmation';
 
 import {
   Container,
@@ -22,15 +20,14 @@ import {
   LabelLocation,
   Location,
   Form,
-  ErrorSubscription,
-  AlreadySubscription,
+  SuccessConfirmation,
 } from './styles';
 
 import Header from '../../../components/Header';
 
 import Loading from '../../../components/Loading';
 
-class MeetupDetail extends Component {
+class MeetupConfirmation extends Component {
   static propTypes = {
     match: PropTypes.shape({
       params: PropTypes.shape({
@@ -38,11 +35,9 @@ class MeetupDetail extends Component {
       }),
     }).isRequired,
     messageError: PropTypes.string.isRequired,
+    messageSuccess: PropTypes.string.isRequired,
     loading: PropTypes.bool.isRequired,
-    meetupLoad: PropTypes.func.isRequired,
-    subscriptionLoad: PropTypes.func.isRequired,
-    messageSubscritionError: PropTypes.string.isRequired,
-    loadingSubscription: PropTypes.bool.isRequired,
+    meetupConfirmationLoad: PropTypes.func.isRequired,
     meetup: PropTypes.shape({
       id: PropTypes.number,
       title: PropTypes.string,
@@ -64,32 +59,18 @@ class MeetupDetail extends Component {
         subscriptions_count: PropTypes.number,
       }),
     }).isRequired,
-    subscription: PropTypes.bool.isRequired,
   };
 
   componentDidMount() {
-    const { meetupLoad } = this.props;
+    const { meetupConfirmationLoad } = this.props;
     const { match } = this.props;
 
-    meetupLoad(match.params.id);
+    meetupConfirmationLoad(match.params.id);
   }
-
-  handleSubscription = (event) => {
-    event.preventDefault();
-
-    const { subscriptionLoad, match, loadingSubscription } = this.props;
-
-    if (!loadingSubscription) subscriptionLoad(match.params.id);
-  };
 
   render() {
     const {
-      messageError,
-      loading,
-      meetup,
-      subscription,
-      loadingSubscription,
-      messageSubscritionError,
+      messageError, messageSuccess, loading, meetup,
     } = this.props;
 
     return (
@@ -118,14 +99,7 @@ membros
                     <LabelLocation>Realizado em:</LabelLocation>
                     <Location>{meetup.location}</Location>
                     <Form onSubmit={this.handleSubscription}>
-                      {messageSubscritionError && (
-                        <ErrorSubscription>{messageSubscritionError}</ErrorSubscription>
-                      )}
-                      {subscription ? (
-                        <AlreadySubscription>Você está inscrito neste meetup</AlreadySubscription>
-                      ) : (
-                        <Button>{loadingSubscription ? 'Enviando...' : 'Inscreva-se'}</Button>
-                      )}
+                      <SuccessConfirmation>{messageSuccess}</SuccessConfirmation>
                     </Form>
                   </Content>
                 </ContainerContent>
@@ -139,17 +113,15 @@ membros
 }
 
 const mapStateToProps = state => ({
-  messageError: state.meetupDetail.messageError,
-  loading: state.meetupDetail.loading,
-  meetup: state.meetupDetail.meetup,
-  subscription: state.meetupDetail.subscription,
-  messageSubscritionError: state.meetupDetail.messageSubscritionError,
-  loadingSubscription: state.meetupDetail.loadingSubscription,
+  messageError: state.meetupConfirmation.messageError,
+  messageSuccess: state.meetupConfirmation.messageSuccess,
+  loading: state.meetupConfirmation.loading,
+  meetup: state.meetupConfirmation.meetup,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators(MeetupDetailActions, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(MeetupConfirmationActions, dispatch);
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(MeetupDetail);
+)(MeetupConfirmation);

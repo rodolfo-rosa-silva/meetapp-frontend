@@ -6,16 +6,11 @@ import { bindActionCreators } from 'redux';
 import { Creators as PreferencesActions } from '../../store/ducks/preferences';
 
 import {
-  Container,
-  Form,
-  HelloUser,
-  IntroText,
-  TitlePreferences,
-  BoxLoading,
-  ListPreferences,
-  NamePreference,
+  Container, Form, HelloUser, IntroText, TitlePreferences, BoxLoading,
 } from './styles';
-import { Button, Message } from '../../styles/forms';
+import {
+  Button, Message, ListPreferences, NamePreference,
+} from '../../styles/forms';
 
 import Checkbox from '../../components/Checkbox';
 import Loading from '../../components/Loading';

@@ -50,3 +50,21 @@ export const Message = styled.div`
   margin: 10px 0 30px;
   width: 100%;
 `;
+
+export const ListPreferences = styled.ul`
+  width: 100%;
+  margin-bottom: 20px;
+  list-style: none;
+
+  li {
+    margin-bottom: 15px;
+  }
+`;
+
+export const NamePreference = styled.label`
+  font-size: 18px;
+  text-align: left;
+  margin-left: 10px;
+  vertical-align: top;
+  line-height: 20px;
+`;

@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-console */
 import { createStore, compose, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
@@ -17,7 +19,7 @@ const sagaMiddleware = createSagaMiddleware({ sagaMonitor });
 middlewares.push(sagaMiddleware);
 middlewares.push(routerMiddleware(history));
 
-const createEnhancer = process.env.NODE_ENV === 'development' ? console.tron.createEnhancer : createStore;
+const createEnhancer = process.env.NODE_ENV === 'development' ? console.tron.createEnhancer : null;
 
 const store = createStore(
   connectRouter(history)(reducers),

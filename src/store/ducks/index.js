@@ -7,6 +7,8 @@ import signup from './signup';
 import preferences from './preferences';
 import dashboard from './dashboard';
 import meetupDetail from './meetupDetail';
+import meetupConfirmation from './meetupConfirmation';
+import profile from './profile';
 
 export default combineReducers({
   router: connectRouter(history),
@@ -15,4 +17,6 @@ export default combineReducers({
   preferences,
   dashboard,
   meetupDetail,
+  meetupConfirmation,
+  profile,
 });
