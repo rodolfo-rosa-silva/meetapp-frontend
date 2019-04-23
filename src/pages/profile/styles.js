@@ -16,6 +16,15 @@ export const ContainerLoad = styled.div`
   align-items: center;
 `;
 
+export const Message = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  color: #e5556e;
+`;
+
 export const Form = styled.form`
   width: 335px;
   display: flex;

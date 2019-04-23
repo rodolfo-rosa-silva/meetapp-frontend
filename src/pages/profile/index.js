@@ -7,10 +7,10 @@ import Header from '../../components/Header';
 import { Creators as ProfileActions } from '../../store/ducks/profile';
 
 import {
-  Container, Form, ContainerLoad, TitlePreferences,
+  Container, Form, ContainerLoad, TitlePreferences, Message,
 } from './styles';
 import {
-  Label, Input, Button, Message, ListPreferences, NamePreference,
+  Label, Input, Button, ListPreferences, NamePreference,
 } from '../../styles/forms';
 
 import Checkbox from '../../components/Checkbox';
@@ -53,6 +53,12 @@ class Profile extends Component {
     profileLoad();
   }
 
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    console.tron.log(data);
+  };
+
   render() {
     const {
       loading, messageErrorLoading, user, userPreferences, preferences,
@@ -62,18 +68,20 @@ class Profile extends Component {
       <Fragment>
         <Header />
         <Container>
-          <Form>
+          <Form onSubmit={this.handleSubmit}>
             {loading && (
               <ContainerLoad>
                 <Loading />
               </ContainerLoad>
             )}
+            {messageErrorLoading && <Message>{messageErrorLoading}</Message>}
             {user.id && preferences.length > 0 && (
               <Fragment>
                 <Label>Nome</Label>
                 <Input
                   type="text"
                   name="username"
+                  value={user.username}
                   placeholder="Digite seu nome"
                   onChange={e => this.setState({ username: e.target.value })}
                 />
@@ -99,6 +107,7 @@ class Profile extends Component {
                         name="preferences[]"
                         value={preference.id}
                         onChange={this.handleCheckboxChange}
+                        checked={userPreferences.includes(preference.id)}
                       />
                       <NamePreference>{preference.name}</NamePreference>
                     </li>
