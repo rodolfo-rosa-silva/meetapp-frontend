@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import camera from '../assets/images/camera.svg';
+
 export const Label = styled.label`
   margin-bottom: 10px;
   font-weight: 700;
@@ -67,4 +69,20 @@ export const NamePreference = styled.label`
   margin-left: 10px;
   vertical-align: top;
   line-height: 20px;
+`;
+
+export const ImageUpload = styled.div`
+  border: 1px dashed #928f95;
+  width: 100%;
+  height: 100px;
+  background-image: url(${camera});
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 24px 24px;
+  margin-bottom: 20px;
+  cursor: pointer;
+
+  input {
+    display: none;
+  }
 `;

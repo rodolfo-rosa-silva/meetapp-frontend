@@ -7,10 +7,10 @@ import Header from '../../components/Header';
 import { Creators as ProfileActions } from '../../store/ducks/profile';
 
 import {
-  Container, Form, ContainerLoad, TitlePreferences, Message,
+  Container, Form, ContainerLoad, TitlePreferences, MessageError,
 } from './styles';
 import {
-  Label, Input, Button, ListPreferences, NamePreference,
+  Label, Input, Button, ListPreferences, NamePreference, Message,
 } from '../../styles/forms';
 
 import Checkbox from '../../components/Checkbox';
@@ -38,31 +38,97 @@ class Profile extends Component {
       }),
     ).isRequired,
     profileLoad: PropTypes.func.isRequired,
+    profileSaveRequest: PropTypes.func.isRequired,
+    loadingSave: PropTypes.bool.isRequired,
+    messageSave: PropTypes.string.isRequired,
   };
 
   state = {
     username: '',
     password: '',
     passwordConfirmation: '',
-    preferences: [],
+    userPreferences: [],
   };
+
+  /**
+   * este metodo serve para repassar o estado apos os dados virem da api,
+   * porem quando ele e utilizado, o metodo this.setState simplesmente para
+   * de funcionar.
+   */
+
+  // static getDerivedStateFromProps(props) {
+  //   const { user, userPreferences } = props;
+
+  //   return { username: user.username, userPreferences };
+  // }
 
   componentDidMount() {
     const { profileLoad } = this.props;
 
     profileLoad();
+
+    /**
+     * Total gambiarra para setar os dados, gostaria de saber qual a forma
+     * correta para guardar esses dados apos a request na api
+     */
+    setTimeout(() => {
+      const { user, userPreferences } = this.props;
+      this.setState({ username: user.username, userPreferences });
+    }, 1000);
   }
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.target);
-    console.tron.log(data);
+    const {
+      username, password, passwordConfirmation, userPreferences,
+    } = this.state;
+
+    const { profileSaveRequest, loadingSave } = this.props;
+
+    if (!loadingSave) {
+      profileSaveRequest({
+        username,
+        password,
+        passwordConfirmation,
+        preferences: userPreferences,
+      });
+    }
+  };
+
+  handleCheckboxChange = async (event) => {
+    const { userPreferences } = this.state;
+    // Id da preferencia que vem do checkbox clicado
+    const currentId = parseInt(event.target.value, 10);
+
+    let currentPreferences = userPreferences;
+
+    /**
+     * Tenho certeza que existe um maneira fazer isso de uma forma menos verbosa
+     * Infelizmente so consegui chegar no resultado desejado assim
+     * Gostaria de uma observacao aqui para ver como fazer isso de outra forma
+     */
+    userPreferences.forEach((id) => {
+      if (id !== currentId) {
+        if (!currentPreferences.includes(currentId)) currentPreferences.push(currentId);
+      } else {
+        currentPreferences = currentPreferences.filter(idLocal => idLocal !== currentId);
+      }
+    });
+
+    this.setState({ userPreferences: currentPreferences });
   };
 
   render() {
     const {
-      loading, messageErrorLoading, user, userPreferences, preferences,
+      loading,
+      messageErrorLoading,
+      user,
+      preferences,
+      loadingSave,
+      messageSave,
     } = this.props;
+
+    const { userPreferences, username, loadFromApi } = this.state;
 
     return (
       <Fragment>
@@ -74,28 +140,25 @@ class Profile extends Component {
                 <Loading />
               </ContainerLoad>
             )}
-            {messageErrorLoading && <Message>{messageErrorLoading}</Message>}
+            {messageErrorLoading && <MessageError>{messageErrorLoading}</MessageError>}
             {user.id && preferences.length > 0 && (
               <Fragment>
                 <Label>Nome</Label>
                 <Input
                   type="text"
-                  name="username"
-                  value={user.username}
+                  value={username}
                   placeholder="Digite seu nome"
                   onChange={e => this.setState({ username: e.target.value })}
                 />
                 <Label>Senha</Label>
                 <Input
-                  type="text"
-                  name="password"
+                  type="password"
                   placeholder="Sua senha secreta"
                   onChange={e => this.setState({ password: e.target.value })}
                 />
                 <Label>Confirmação de senha</Label>
                 <Input
-                  type="text"
-                  name="password"
+                  type="password"
                   placeholder="Sua senha secreta"
                   onChange={e => this.setState({ passwordConfirmation: e.target.value })}
                 />
@@ -104,7 +167,6 @@ class Profile extends Component {
                   {preferences.map(preference => (
                     <li key={preference.id}>
                       <Checkbox
-                        name="preferences[]"
                         value={preference.id}
                         onChange={this.handleCheckboxChange}
                         checked={userPreferences.includes(preference.id)}
@@ -113,7 +175,8 @@ class Profile extends Component {
                     </li>
                   ))}
                 </ListPreferences>
-                <Button type="submit">Salvar</Button>
+                {messageSave && <Message>{messageSave}</Message>}
+                <Button type="submit">{loadingSave ? 'Enviando...' : 'Salvar'}</Button>
               </Fragment>
             )}
           </Form>
@@ -129,6 +192,8 @@ const mapStateToProps = state => ({
   user: state.profile.user,
   userPreferences: state.profile.userPreferences,
   preferences: state.profile.preferences,
+  loadingSave: state.profile.loadingSave,
+  messageSave: state.profile.messageSave,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(ProfileActions, dispatch);

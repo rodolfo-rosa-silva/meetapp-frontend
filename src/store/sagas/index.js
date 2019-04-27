@@ -5,6 +5,7 @@ import { Types as SignupTypes } from '../ducks/signup';
 import { Types as PreferencesTypes } from '../ducks/preferences';
 import { Types as DashboardTypes } from '../ducks/dashboard';
 import { Types as MeetupDetailTypes } from '../ducks/meetupDetail';
+import { Types as MeetupNewTypes } from '../ducks/meetupNew';
 import { Types as MeetupConfirmationTypes } from '../ducks/meetupConfirmation';
 import { Types as ProfileTypes } from '../ducks/profile';
 
@@ -14,7 +15,8 @@ import { preferencesLoad, preferencesRequest } from './preferences';
 import { dashboardLoad } from './dashboard';
 import { meetupLoad, subscriptionLoad } from './meetupDetail';
 import { meetupConfirmationLoad } from './meetupConfirmation';
-import { profileLoad } from './profile';
+import { meetupNewLoad, meetupNewSaveLoad } from './meetupNew';
+import { profileLoad, profileSaveLoad } from './profile';
 
 export default function* rootSaga() {
   yield all([takeLatest(SigninTypes.SIGNIN_REQUEST, signin)]);
@@ -26,4 +28,7 @@ export default function* rootSaga() {
   yield all([takeLatest(MeetupDetailTypes.SUBSCRIPTION_LOAD, subscriptionLoad)]);
   yield all([takeLatest(MeetupConfirmationTypes.MEETUP_CONFIRMATION_LOAD, meetupConfirmationLoad)]);
   yield all([takeLatest(ProfileTypes.PROFILE_LOAD, profileLoad)]);
+  yield all([takeLatest(ProfileTypes.PROFILE_SAVE_REQUEST, profileSaveLoad)]);
+  yield all([takeLatest(MeetupNewTypes.MEETUP_NEW_LOAD, meetupNewLoad)]);
+  yield all([takeLatest(MeetupNewTypes.MEETUP_NEW_SAVE_REQUEST, meetupNewSaveLoad)]);
 }

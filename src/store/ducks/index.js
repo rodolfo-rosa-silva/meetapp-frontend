@@ -8,6 +8,7 @@ import preferences from './preferences';
 import dashboard from './dashboard';
 import meetupDetail from './meetupDetail';
 import meetupConfirmation from './meetupConfirmation';
+import meetupNew from './meetupNew';
 import profile from './profile';
 
 export default combineReducers({
@@ -18,5 +19,6 @@ export default combineReducers({
   dashboard,
   meetupDetail,
   meetupConfirmation,
+  meetupNew,
   profile,
 });

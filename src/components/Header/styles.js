@@ -35,8 +35,12 @@ export const Nav = styled.ul`
 `;
 
 export const BoxLinkProfile = styled.div`
+  display: flex;
+  justify-content: center;
+
   img {
     width: 24px;
     height: 24px;
+    margin-left: 20px;
   }
 `;

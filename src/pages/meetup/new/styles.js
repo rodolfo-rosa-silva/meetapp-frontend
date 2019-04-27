@@ -33,11 +33,3 @@ export const Form = styled.form`
   flex-direction: column;
   align-items: center;
 `;
-
-export const TitlePreferences = styled.h3`
-  font-size: 16px;
-  font-weight: 700;
-  text-align: left;
-  width: 100%;
-  margin: 30px 0 20px;
-`;
