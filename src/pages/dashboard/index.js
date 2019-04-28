@@ -157,7 +157,7 @@ class Dashboard extends Component {
               {meetups.subscriptions && (
                 <ContentRow>
                   {meetups.subscriptions.map(meetup => (
-                    <CardMeetup>
+                    <CardMeetup key={meetup.id}>
                       <Link to={`/meetup/${meetup.id}`} key={meetup.id}>
                         <BackgroundMeetup src={meetup.file.url} />
                         <BoxInfos>
@@ -190,7 +190,7 @@ membros
               {meetups.nextMeetups && (
                 <ContentRow>
                   {meetups.nextMeetups.map(meetup => (
-                    <CardMeetup>
+                    <CardMeetup key={meetup.id}>
                       <Link to={`/meetup/${meetup.id}`} key={meetup.id}>
                         <BackgroundMeetup src={meetup.file.url} />
                         <BoxInfos>
@@ -223,7 +223,7 @@ membros
               {meetups.nextRecommended && (
                 <ContentRow>
                   {meetups.nextRecommended.map(meetup => (
-                    <CardMeetup>
+                    <CardMeetup key={meetup.id}>
                       <Link to={`/meetup/${meetup.id}`} key={meetup.id}>
                         <BackgroundMeetup src={meetup.file.url} />
                         <BoxInfos>

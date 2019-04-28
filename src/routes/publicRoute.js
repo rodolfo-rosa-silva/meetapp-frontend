@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -12,7 +13,7 @@ const PublicRoute = ({ component: Component, ...rest }) => (
 );
 
 PublicRoute.propTypes = {
-  component: PropTypes.func.isRequired,
+  component: PropTypes.object.isRequired,
 };
 
 export default PublicRoute;

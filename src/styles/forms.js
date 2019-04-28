@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
+import InputMask from 'react-input-mask';
 import camera from '../assets/images/camera.svg';
+
 
 export const Label = styled.label`
   margin-bottom: 10px;
@@ -9,7 +11,7 @@ export const Label = styled.label`
   width: 100%;
 `;
 
-export const Input = styled.input`
+export const Input = styled(InputMask)`
   width: 100%;
   margin-bottom: 25px;
   padding: 5px 0;

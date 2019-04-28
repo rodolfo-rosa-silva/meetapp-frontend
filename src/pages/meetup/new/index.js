@@ -8,6 +8,7 @@ import { Creators as MeetupNewActions } from '../../../store/ducks/meetupNew';
 import {
   Container, Form, ContainerLoad, MessageError,
 } from './styles';
+
 import {
   Label,
   Input,
@@ -39,22 +40,64 @@ class MeetupNew extends Component {
     messageSave: PropTypes.string.isRequired,
   };
 
+  state = {
+    title: '',
+    description: '',
+    location: '',
+    date: '',
+    time: '',
+    file_id: 0,
+    selectedPreferences: [],
+  };
+
   componentDidMount() {
     const { meetupNewLoad } = this.props;
 
     meetupNewLoad();
   }
 
+  handleSubmit = (event) => {
+    event.preventDefault();
+  };
+
+  handleCheckboxChange = (event) => {
+    const { selectedPreferences } = this.state;
+    // Id da preferencia que vem do checkbox clicado
+    const currentId = parseInt(event.target.value, 10);
+
+    let currentPreferences = selectedPreferences;
+
+    /**
+     * Tenho certeza que existe um maneira fazer isso de uma forma menos verbosa
+     * Infelizmente so consegui chegar no resultado desejado assim
+     * Gostaria de uma observacao aqui para ver como fazer isso de outra forma
+     */
+    if (selectedPreferences.length > 0) {
+      selectedPreferences.forEach((id) => {
+        if (id !== currentId) {
+          if (!currentPreferences.includes(currentId)) currentPreferences.push(currentId);
+        } else {
+          currentPreferences = currentPreferences.filter(idLocal => idLocal !== currentId);
+        }
+      });
+    } else {
+      currentPreferences.push(currentId);
+    }
+    this.setState({ selectedPreferences: currentPreferences });
+  };
+
   render() {
     const {
       loading, messageErrorLoading, preferences, loadingSave, messageSave,
     } = this.props;
 
+    const { selectedPreferences } = this.state;
+
     return (
       <Fragment>
         <Header />
         <Container>
-          <Form>
+          <Form onSubmit={this.handleSubmit}>
             {loading && (
               <ContainerLoad>
                 <Loading />
@@ -64,9 +107,17 @@ class MeetupNew extends Component {
             {preferences && preferences.length > 0 && (
               <Fragment>
                 <Label>Título</Label>
-                <Input type="text" placeholder="Digite o título do meetup" />
+                <Input
+                  type="text"
+                  placeholder="Digite o título do meetup"
+                  onChange={e => this.setState({ title: e.target.value })}
+                />
                 <Label>Descrição</Label>
-                <Input type="text" placeholder="Descreva seu meetup" />
+                <Input
+                  type="text"
+                  placeholder="Descreva seu meetup"
+                  onChange={e => this.setState({ description: e.target.value })}
+                />
                 <Label>Imagem</Label>
                 <ImageUpload
                   onClick={() => {
@@ -81,12 +132,34 @@ class MeetupNew extends Component {
                   />
                 </ImageUpload>
                 <Label>Localização</Label>
-                <Input type="text" placeholder="Onde seu meetup irá acontecer?" />
+                <Input
+                  type="text"
+                  placeholder="Onde seu meetup irá acontecer?"
+                  onChange={e => this.setState({ location: e.target.value })}
+                />
+                <Label>Data</Label>
+                <Input
+                  type="text"
+                  mask="99/99/9999"
+                  alwaysShowMask
+                  onChange={e => this.setState({ date: e.target.value })}
+                />
+                <Label>Hora</Label>
+                <Input
+                  type="text"
+                  mask="99:99"
+                  alwaysShowMask
+                  onChange={e => this.setState({ time: e.target.value })}
+                />
                 <Label>Tema do Meetup</Label>
                 <ListPreferences>
                   {preferences.map(preference => (
                     <li key={preference.id}>
-                      <Checkbox value={preference.id} onChange={this.handleCheckboxChange} />
+                      <Checkbox
+                        value={preference.id}
+                        onChange={this.handleCheckboxChange}
+                        checked={selectedPreferences.includes(preference.id)}
+                      />
                       <NamePreference>{preference.name}</NamePreference>
                     </li>
                   ))}

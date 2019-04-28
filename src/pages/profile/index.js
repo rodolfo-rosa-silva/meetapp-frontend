@@ -77,7 +77,7 @@ class Profile extends Component {
     }, 1000);
   }
 
-  handleSubmit = async (event) => {
+  handleSubmit = (event) => {
     event.preventDefault();
     const {
       username, password, passwordConfirmation, userPreferences,
@@ -95,7 +95,7 @@ class Profile extends Component {
     }
   };
 
-  handleCheckboxChange = async (event) => {
+  handleCheckboxChange = (event) => {
     const { userPreferences } = this.state;
     // Id da preferencia que vem do checkbox clicado
     const currentId = parseInt(event.target.value, 10);
@@ -128,7 +128,7 @@ class Profile extends Component {
       messageSave,
     } = this.props;
 
-    const { userPreferences, username, loadFromApi } = this.state;
+    const { userPreferences, username } = this.state;
 
     return (
       <Fragment>
