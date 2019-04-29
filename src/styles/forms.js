@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import InputMask from 'react-input-mask';
 import camera from '../assets/images/camera.svg';
 
-
 export const Label = styled.label`
   margin-bottom: 10px;
   font-weight: 700;
@@ -23,6 +22,24 @@ export const Input = styled(InputMask)`
   &::-webkit-input-placeholder {
     opacity: 0.5;
     color: #ffffff;
+  }
+`;
+
+export const Textarea = styled.textarea`
+  width: 100%;
+  margin-bottom: 25px;
+  padding: 5px 0;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #ffffff;
+  resize: none;
+  font-family: 'Helvetica', sans-serif;
+
+  &::-webkit-input-placeholder {
+    opacity: 0.5;
+    color: #ffffff;
+    font-family: 'Helvetica', sans-serif;
   }
 `;
 

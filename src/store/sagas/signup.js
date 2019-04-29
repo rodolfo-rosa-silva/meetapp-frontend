@@ -18,7 +18,7 @@ export function* signup(action) {
      * pois estou atrasado com relacao ao prazo final
      */
     localStorage.setItem('@meetapp:user_id', data.user.id);
-    localStorage.setItem('@meetapp:username', response.user.username);
+    localStorage.setItem('@meetapp:username', data.user.username);
 
     history.push('/preferences');
   } catch (err) {

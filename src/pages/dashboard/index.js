@@ -30,6 +30,7 @@ import {
   ButtonLink,
   BoxLoading,
   MessageErrorLoad,
+  NoResults,
 } from './styles';
 
 class Dashboard extends Component {
@@ -154,7 +155,7 @@ class Dashboard extends Component {
                 </BoxLoading>
               )}
               {messageError.length > 0 ? <MessageErrorLoad>{messageError}</MessageErrorLoad> : ''}
-              {meetups.subscriptions && (
+              {meetups.subscriptions && meetups.subscriptions.length > 0 ? (
                 <ContentRow>
                   {meetups.subscriptions.map(meetup => (
                     <CardMeetup key={meetup.id}>
@@ -177,6 +178,8 @@ membros
                     </CardMeetup>
                   ))}
                 </ContentRow>
+              ) : (
+                <NoResults>Você não possui nenhuma inscrição</NoResults>
               )}
             </RowMeetups>
             <RowMeetups>
@@ -187,7 +190,7 @@ membros
                 </BoxLoading>
               )}
               {messageError.length > 0 ? <MessageErrorLoad>{messageError}</MessageErrorLoad> : ''}
-              {meetups.nextMeetups && (
+              {meetups.nextMeetups && meetups.nextMeetups.length > 0 ? (
                 <ContentRow>
                   {meetups.nextMeetups.map(meetup => (
                     <CardMeetup key={meetup.id}>
@@ -210,6 +213,8 @@ membros
                     </CardMeetup>
                   ))}
                 </ContentRow>
+              ) : (
+                <NoResults>Não tem meetups cadastrados para os próximos dias</NoResults>
               )}
             </RowMeetups>
             <RowMeetups>
@@ -220,7 +225,7 @@ membros
                 </BoxLoading>
               )}
               {messageError.length > 0 ? <MessageErrorLoad>{messageError}</MessageErrorLoad> : ''}
-              {meetups.nextRecommended && (
+              {meetups.nextRecommended && meetups.nextRecommended.length > 0 ? (
                 <ContentRow>
                   {meetups.nextRecommended.map(meetup => (
                     <CardMeetup key={meetup.id}>
@@ -243,6 +248,10 @@ membros
                     </CardMeetup>
                   ))}
                 </ContentRow>
+              ) : (
+                <NoResults>
+                  Não encontramos meetups para recomendar com base nas suas preferências
+                </NoResults>
               )}
             </RowMeetups>
           </Grid>

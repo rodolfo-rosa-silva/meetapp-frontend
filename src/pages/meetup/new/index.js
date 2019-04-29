@@ -1,8 +1,13 @@
 import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
+
+import { uniqueId } from 'lodash';
+import filesize from 'filesize';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import api from '../../../services/api';
 import { Creators as MeetupNewActions } from '../../../store/ducks/meetupNew';
 
 import {
@@ -12,17 +17,20 @@ import {
 import {
   Label,
   Input,
+  Textarea,
   Button,
   ListPreferences,
   NamePreference,
   Message,
-  ImageUpload,
 } from '../../../styles/forms';
 
 import Checkbox from '../../../components/Checkbox';
 import Loading from '../../../components/Loading';
 
 import Header from '../../../components/Header';
+
+import Upload from '../../../components/Upload';
+import FileList from '../../../components/FileList';
 
 class MeetupNew extends Component {
   static propTypes = {
@@ -46,8 +54,8 @@ class MeetupNew extends Component {
     location: '',
     date: '',
     time: '',
-    file_id: 0,
     selectedPreferences: [],
+    uploadedFiles: [],
   };
 
   componentDidMount() {
@@ -56,8 +64,36 @@ class MeetupNew extends Component {
     meetupNewLoad();
   }
 
+  componentWillUnmount() {
+    const { uploadedFiles } = this.state;
+    uploadedFiles.forEach(file => URL.revokeObjectURL(file.preview));
+  }
+
   handleSubmit = (event) => {
     event.preventDefault();
+
+    const {
+      title,
+      description,
+      location,
+      date,
+      time,
+      uploadedFiles,
+      selectedPreferences: preferences,
+    } = this.state;
+
+    const data = {
+      title,
+      description,
+      location,
+      datetime: `${moment(date, 'DD/MM/YYYY').format('YYYY-MM-DD')} ${time}:00`,
+      file_id: uploadedFiles.length ? uploadedFiles[0].id : 0,
+      preferences,
+    };
+
+    const { meetupNewSaveRequest, loading } = this.props;
+
+    if (!loading) meetupNewSaveRequest(data);
   };
 
   handleCheckboxChange = (event) => {
@@ -86,12 +122,82 @@ class MeetupNew extends Component {
     this.setState({ selectedPreferences: currentPreferences });
   };
 
+  handleUpload = (files) => {
+    const fileToUpload = files.map(file => ({
+      file,
+      id: uniqueId(),
+      name: file.name,
+      readableSize: filesize(file.size),
+      preview: URL.createObjectURL(file),
+      progress: 0,
+      uploaded: false,
+      error: false,
+      url: null,
+    }));
+
+    const { uploadedFiles } = this.state;
+
+    this.setState({
+      uploadedFiles: uploadedFiles.concat(fileToUpload),
+    });
+
+    fileToUpload.forEach(this.processUpload);
+  };
+
+  updateFile = (id, data) => {
+    const { uploadedFiles } = this.state;
+
+    this.setState({
+      // eslint-disable-next-line max-len
+      uploadedFiles: uploadedFiles.map(uploadedFile => (id === uploadedFile.id ? { ...uploadedFile, ...data } : uploadedFile)),
+    });
+  };
+
+  processUpload = (uploadedFile) => {
+    const data = new FormData();
+
+    data.append('file', uploadedFile.file, uploadedFile.name);
+
+    api
+      .post('files', data, {
+        onUploadProgress: (e) => {
+          const progress = parseInt(Math.round((e.loaded * 100) / e.total), 10);
+
+          this.updateFile(uploadedFile.id, {
+            progress,
+          });
+        },
+      })
+      .then((response) => {
+        this.updateFile(uploadedFile.id, {
+          uploaded: true,
+          id: response.data.id,
+          url: response.data.url,
+        });
+      })
+      .catch(() => {
+        this.updateFile(uploadedFile.id, {
+          error: true,
+        });
+      });
+  };
+
+  handleDelete = async (id) => {
+    const { uploadedFiles } = this.state;
+
+    await api.delete(`files/${id}`);
+
+    this.setState({
+      uploadedFiles: uploadedFiles.filter(file => file.id !== id),
+    });
+  };
+
   render() {
     const {
       loading, messageErrorLoading, preferences, loadingSave, messageSave,
     } = this.props;
 
-    const { selectedPreferences } = this.state;
+    const { selectedPreferences, uploadedFiles } = this.state;
 
     return (
       <Fragment>
@@ -113,24 +219,16 @@ class MeetupNew extends Component {
                   onChange={e => this.setState({ title: e.target.value })}
                 />
                 <Label>Descrição</Label>
-                <Input
-                  type="text"
+                <Textarea
+                  rows="5"
                   placeholder="Descreva seu meetup"
                   onChange={e => this.setState({ description: e.target.value })}
                 />
                 <Label>Imagem</Label>
-                <ImageUpload
-                  onClick={() => {
-                    this.fileUploadRef.click();
-                  }}
-                >
-                  <input
-                    type="file"
-                    ref={(ref) => {
-                      this.fileUploadRef = ref;
-                    }}
-                  />
-                </ImageUpload>
+                {!uploadedFiles.length && <Upload onUpload={this.handleUpload} />}
+                {!!uploadedFiles.length && (
+                  <FileList files={uploadedFiles} onDelete={this.handleDelete} />
+                )}
                 <Label>Localização</Label>
                 <Input
                   type="text"

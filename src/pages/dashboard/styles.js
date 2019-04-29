@@ -135,3 +135,8 @@ export const ButtonLink = styled.div`
     height: 15px;
   }
 `;
+
+export const NoResults = styled.p`
+  font-size: 12px;
+  color: #999999;
+`;
