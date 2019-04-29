@@ -20,7 +20,7 @@ baseURL:  'http://localhost:3333',
 
 Para ambientar a API criada em conjunto com esse projeto, basta acessar o repositório:
 
-[[https://github.com/rodolfo-rosa-silva/meetapp-backend](https://github.com/rodolfo-rosa-silva/meetapp-backend)](https://github.com/rodolfo-rosa-silva/meetapp-backend)
+https://github.com/rodolfo-rosa-silva/meetapp-backend
 
 **Tecnologias utilizadas**
 
